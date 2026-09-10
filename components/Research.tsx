@@ -10,7 +10,7 @@ export default function Research() {
           <div className="flex flex-col gap-2.5">
             <span className="eyebrow uppercase">05 — Research</span>
             <h2 className="font-display text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.05] text-bright">
-              Reading the papers, then rewriting them in code.
+              Reading the papers,finding gaps, designing solutions, then implementing them in code.
             </h2>
           </div>
         </Reveal>
