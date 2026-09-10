@@ -59,9 +59,9 @@ export const projects: Project[] = [
     slug: "alphafold-conformational-ensembles",
     title: "AlphaFold-based protein conformational ensemble prediction",
     category: "Research",
-    status: "Final-year thesis",
+    status: "Final-year research project",
     tagline:
-      "A training-free, inference-time pipeline that coaxes AlphaFold into sampling multiple conformations. Localized random column masking of the MSA plus active inference-time dropout, with DBSCAN clustering to pick representative states. 78.3% success on OC23 while generating only 100 models per target.",
+      "A training-free, inference-time pipeline that coaxes AlphaFold into sampling multiple conformations. Localized random column masking of the MSA plus active inference-time dropout, with DBSCAN clustering to pick representative states. 78.3% success on OC23 dataset while generating only 100 models per target.",
     tags: ["PyTorch", "JAX", "ColabFold", "DBSCAN"],
     featured: true,
     diagram: "alphafold",
@@ -158,7 +158,7 @@ export const projects: Project[] = [
     category: "Agentic AI",
     status: "Ongoing",
     tagline:
-      "A coffee-shop assistant that takes orders, answers menu questions, filters off-topic chat, and recommends products with a Market Basket Analysis engine. Llama-based LLM and embeddings on RunPod, RAG over Pinecone, Firebase backend, React Native app.",
+      "A coffee-shop assistant that takes orders, answers menu questions, filters off-topic chat, and recommends products with a Market Basket Analysis engine. Llama-based LLM and embeddings were deployed on RunPod, RAG over Pinecone, Firebase backend, React Native app.",
     tags: ["Llama", "RunPod", "Pinecone", "React Native"],
     diagram: "agents",
 

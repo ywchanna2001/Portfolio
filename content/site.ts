@@ -44,7 +44,7 @@ export const site = {
     lead: "Let's build something",
     emphasis: "that actually ships.",
   },
-  contactSub: "Open to ML engineer and research engineer roles, and graduate study.",
+  contactSub: "Open to AI/ML Engineer, Data Scientist and Research Engineer roles.",
 
   /**
    * Footer links. Replace every [your-handle] with your real profile URL —
@@ -73,7 +73,7 @@ export const nav = [
   { label: "About", href: "/#about" },
   { label: "Education", href: "/#education" },
   { label: "Skills", href: "/#skills" },
-  { label: "Work", href: "/#work" },
+  { label: "Pojects", href: "/#work" },
   { label: "Research", href: "/#research" },
   { label: "Experience", href: "/#experience" },
   { label: "Contact", href: "/#contact" },
@@ -91,14 +91,18 @@ export const publications = [
     summary:
       "A review paper analysing the architectural advancements behind protein structure prediction across the AlphaFold generations.",
     /** TODO: replace with the real link to your paper. */
-    href: "[link-to-your-preprint]",
+    href: "https://www.preprints.org/manuscript/202601.0708",
     /** TODO: set the real publication year. */
-    year: "[YEAR]",
-    citation: `@article{dissanayaka[YEAR]alphafold,
-  title  = {The Evolution of the AlphaFold Architecture},
-  author = {Dissanayaka, Channa},
-  year   = {[YEAR]},
-  note   = {Preprint}
-}`,
-  },
+    year: "2026",
+    /** TODO: set the real citation. */
+    citation: `@article{dissanayaka2026alphafold,
+  title   = {The Evolution of the AlphaFold Architecture},
+  author  = {Dissanayaka, Y. C. B. J.},
+  journal = {Preprints},
+  year    = {2026},
+  number  = {2026010708},
+  doi     = {10.20944/preprints202601.0708.v1},
+  url     = {https://doi.org/10.20944/preprints202601.0708.v1}
+`},
 ];
+

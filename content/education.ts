@@ -27,11 +27,24 @@ export const education: Degree[] = [
       "Artificial Neural Networks",
       "Natural Language Processing",
       "Machine Vision",
-      "Big Data & Data Warehousing",
       "Expert Systems",
       "Multi-Agent Systems",
+      "Artificial Cognitive Systems",
+      "Fuzzy Logic",
+      "Evolutionary Computing",
       "Time Series Analysis and Forecasting",
+      "Probability and Statistics",
+      "Statistical Inference",
       "Computational Statistics",
+      "Fundamentals of Databases",
+      "Database Management Systems",
+      "Data Mining and Data Warehousing",
+      "Mathematical Methods",
+      "Linear Algebra and Calculus",
+      "Software Engineering",
+      "Object Oriented Programming"
+
+
     ],
   },
 ];
