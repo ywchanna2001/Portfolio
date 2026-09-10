@@ -12,9 +12,9 @@ export default function Work() {
   return (
     <Section
       id="work"
-      eyebrow="04 — Selected work"
-      heading="Case studies, not screenshots."
-      aside="Each one: problem → approach → architecture → results → what I'd change."
+      eyebrow="04 — Projects"
+      heading="Case studies of the selected projects."
+      aside="Each one represents a complete problem-solving process: problem → approach → architecture → results → what I'd change."
     >
       <div className="grid gap-6 lg:grid-cols-2">
         {featured.map((p, i) => (
