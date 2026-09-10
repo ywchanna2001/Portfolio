@@ -26,6 +26,12 @@ export default function Contact() {
             >
               {site.email}
             </a>
+            <a
+               href={`tel:${site.phone.replace(/\s/g, "")}`}
+                className="w-fit font-mono text-lg text-body underline decoration-accent/40 underline-offset-4 transition-colors hover:text-accent md:text-xl"
+              >
+                {site.phone}
+              </a>
 
             <div className="flex flex-wrap gap-x-6 gap-y-2 font-mono text-sm">
               {site.links.map((l) => (
