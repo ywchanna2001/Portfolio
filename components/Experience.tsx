@@ -10,7 +10,7 @@ export default function Experience() {
           <div className="flex flex-col gap-2.5">
             <span className="eyebrow uppercase">06 — Experience</span>
             <h2 className="font-display text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.05] text-bright">
-              Where I&rsquo;ve shipped.
+              Where I have worked.
             </h2>
           </div>
         </Reveal>
