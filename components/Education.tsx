@@ -13,7 +13,7 @@ export default function Education() {
           <div className="flex flex-col gap-2.5">
             <span className="eyebrow uppercase">02 — Education</span>
             <h2 className="font-display text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.05] text-bright">
-              Where the foundations came from.
+              Fundementals matter.
             </h2>
           </div>
         </Reveal>
