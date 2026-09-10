@@ -53,10 +53,10 @@ export const skillGroups: SkillGroup[] = [
   },
   {
     group: "Databases",
-    items: ["MSSQL", "MySQL", "Firebase"],
+    items: ["MSSQL", "MySQL","MongoDB", "PostgreSQL"],
   },
   {
-    group: "Tools & practices",
-    items: ["Git", "Linux", "Jupyter", "Model deployment", "Experiment tracking"],
+    group: "Other tools & skills",
+    items: ["Git", "Firebase" , "Model deployment", "Experiment tracking"],
   },
 ];
