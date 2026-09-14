@@ -387,15 +387,15 @@ export const projects: Project[] = [
         eyebrow: "04 — Results",
         heading: "Accuracy and what it enabled.",
         body: [
-          "[Add here: model error (MAE/RMSE) against your test set and a baseline to compare it to, plus a screenshot of the dashboard. A screenshot matters here — this is the most product-like thing in your portfolio.]",
+          "To be added...",
         ],
       },
       {
         id: "reflection",
         eyebrow: "05 — What I'd change",
-        heading: "Honest notes.",
+        heading: "Further Improvements.",
         body: [
-          "[Write in your own voice: whether the Spring Boot + Flask split was worth the operational cost, where the emission estimates are weakest, and what data you wish you had.]",
+          "To be added...",
         ],
       },
     ],
