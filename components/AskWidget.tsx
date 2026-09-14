@@ -134,7 +134,7 @@ export default function AskWidget() {
             <div className="flex items-center gap-2.5">
               <span className="h-2 w-2 rounded-full bg-accent" />
               <span className="font-mono text-xs text-body">
-                ask-{site.name.split(" ")[0].toLowerCase()} · RAG over my CV &amp; projects
+                ask-{site.name.split(" ")[0].toLowerCase()} · This is under development; answers may be incomplete or wrong.
               </span>
             </div>
             <button onClick={() => setOpen(false)} aria-label="Close" className="text-dim hover:text-body">
