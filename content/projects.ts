@@ -176,11 +176,11 @@ export const projects: Project[] = [
 
     meta: [
       { label: "Role", value: "Solo build, end to end" },
-      { label: "Stack", value: "Llama · Pinecone · Firebase" },
+      { label: "Stack", value: "Llama · Pinecone · Firebase · React Native · Python · Runpod" },
       { label: "Client", value: "React Native" },
-      { label: "Status", value: "Ongoing" },
+      { label: "Status", value: "Completed" },
     ],
-    links: [{ label: "GitHub", href: "[link-to-repo]" }],
+    links: [{ label: "GitHub", href: "https://github.com/ywchanna2001/Coffee_Shop_Chatbot.git" }],
 
     heading: {
       lead: "One chat box,",
@@ -237,16 +237,15 @@ export const projects: Project[] = [
         eyebrow: "04 — Results",
         heading: "What it does today.",
         body: [
-          "[Add here: how the assistant performs on your own test conversations — order accuracy, how often the guard agent correctly rejects off-topic input, retrieval hit rate, and end-to-end latency. Even rough numbers from 50 hand-written test cases beat no numbers.]",
-          "[A short screen recording of a real ordering conversation would be the single most persuasive thing on this page.]",
+          "To be added...",
         ],
       },
       {
         id: "reflection",
         eyebrow: "05 — What I'd change",
-        heading: "Honest notes.",
+        heading: "Further Improvements.",
         body: [
-          "[Write in your own voice: what the agent split bought you and what it cost in latency, where RAG still returns the wrong chunk, and whether Market Basket Analysis was the right call versus a simpler heuristic.]",
+          "To be added...",
         ],
       },
     ],
