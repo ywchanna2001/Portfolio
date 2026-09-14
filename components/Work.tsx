@@ -80,7 +80,7 @@ function FeaturedCard({ project: p }: { project: Project }) {
         <h3 className="text-[clamp(1.5rem,2.6vw,2rem)] font-semibold leading-tight tracking-[-0.01em] text-bright">
           {p.title}
         </h3>
-        <p className="leading-relaxed text-muted">{p.tagline}</p>
+        <p className="hyphens-auto text-justify leading-relaxed text-muted">{p.tagline}</p>
         <div className="flex flex-wrap gap-2">
           {p.tags.map((t) => (
             <span key={t} className="chip">
@@ -111,7 +111,7 @@ function StandardCard({ project: p, wide = false }: { project: Project; wide?: b
           {p.status && <Tag>{p.status}</Tag>}
         </div>
         <h3 className="text-2xl font-semibold leading-tight text-bright">{p.title}</h3>
-        <p className="text-[15px] leading-relaxed text-muted">{p.tagline}</p>
+        <p className="hyphens-auto text-justify text-[15px] leading-relaxed text-muted">{p.tagline}</p>
         {!wide && (
           <>
             <div className="mt-2 flex flex-wrap gap-2">

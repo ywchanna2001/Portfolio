@@ -18,6 +18,26 @@ const OUT = "rgba(60,124,240,0.12)";
 const OUT_LINE = "rgba(60,124,240,0.6)";
 const WIRE = "rgba(231,235,243,0.35)";
 
+/** A dashed container marking one module of the pipeline. */
+function Module({
+  x, y, w, h, label, muted = false,
+}: {
+  x: number; y: number; w: number; h: number; label: string; muted?: boolean;
+}) {
+  return (
+    <g>
+      <rect
+        x={x} y={y} width={w} height={h} rx={12} fill="none"
+        stroke={muted ? "rgba(255,255,255,0.10)" : "rgba(255,255,255,0.16)"}
+        strokeDasharray="5 6"
+      />
+      <text x={x + 14} y={y + 20} fill="#8B95A9" fontSize={10} letterSpacing="0.08em">
+        {label.toUpperCase()}
+      </text>
+    </g>
+  );
+}
+
 /** One labelled box. */
 function Node({
   x,
@@ -57,23 +77,56 @@ const wire = { stroke: WIRE, strokeWidth: 1.5, fill: "none" } as const;
 
 /* -------------------------------------------------------------------------- */
 
+/**
+ * Mirrors Figure 5.1 of the thesis: four modules, one forward direction.
+ * Pre-processing and the inference engine sit on the prediction path;
+ * visualization and evaluation consume the generated ensemble, and
+ * evaluation is off the prediction path (drawn muted).
+ */
 export function AlphaFoldDiagram() {
   return (
-    <svg viewBox="0 0 756 240" className="h-auto w-full font-mono" role="img" aria-label="AlphaFold ensemble pipeline: sequence, MSA search, column masking and dropout in parallel, AlphaFold2 run 100 times, DBSCAN clustering">
+    <svg
+      viewBox="0 0 1200 430"
+      className="h-auto w-full font-mono"
+      role="img"
+      aria-label="Pipeline architecture: a FASTA sequence enters pre-processing, where MMseqs2 builds an MSA and DBSCAN partitions it into ten sub-alignments. The inference engine applies random column masking and runs AlphaFold2 with dropout retained, ten times per cluster, producing one hundred structures. Those feed a visualization module and, for benchmarking only, an evaluation module."
+    >
+      {/* Module containers */}
+      <Module x={118} y={40} w={352} h={158} label="Pre-processing" />
+      <Module x={628} y={40} w={382} h={158} label="Inference engine" />
+      <Module x={548} y={252} w={286} h={148} label="Visualization" />
+      <Module x={864} y={252} w={316} h={148} label="Evaluation · benchmark only" muted />
+
+      {/* Prediction path wiring */}
       <g {...wire}>
-        <line x1="120" y1="120" x2="160" y2="120" />
-        <path d="M280 120 C 300 120, 300 55, 320 55" />
-        <path d="M280 120 C 300 120, 300 185, 320 185" />
-        <path d="M460 55 C 480 55, 480 120, 500 120" />
-        <path d="M460 185 C 480 185, 480 120, 500 120" />
-        <line x1="610" y1="120" x2="646" y2="120" />
+        <line x1="96" y1="120" x2="138" y2="120" />
+        <line x1="288" y1="120" x2="310" y2="120" />
+        <line x1="450" y1="120" x2="496" y2="120" />
+        <line x1="600" y1="120" x2="648" y2="120" />
+        <line x1="798" y1="120" x2="820" y2="120" />
+        <line x1="990" y1="120" x2="1030" y2="120" />
+        {/* Fork down from the ensemble to the two consumers */}
+        <path d="M1105 158 L 1105 232 L 691 232 L 691 282" />
+        <path d="M1022 232 L 1022 282" />
       </g>
-      <Node x={0} y={85} title="sequence" sub="FASTA" />
-      <Node x={160} y={85} title="MSA search" sub="ColabFold" />
-      <Node x={320} y={20} w={140} title="column mask" sub="seed i" tone="accent" />
-      <Node x={320} y={150} w={140} title="dropout on" sub="seed i" tone="accent" />
-      <Node x={500} y={85} w={110} title="AlphaFold2" sub="i = 1…100" />
-      <Node x={646} y={85} w={110} title="DBSCAN" sub="→ ensemble" tone="output" />
+
+      {/* Prediction path nodes */}
+      <Node x={0} y={85} w={96} title="sequence" sub="FASTA" />
+      <Node x={138} y={85} w={150} title="MSA search" sub="MMseqs2 · UniRef30" />
+      <Node x={310} y={85} w={140} title="DBSCAN" sub="min_samples = 3" />
+      <Node x={496} y={85} w={104} title="K = 10" sub="sub-MSAs" />
+      <Node x={648} y={85} w={150} title="column mask" sub="ρ = 0.15" tone="accent" />
+      <Node x={820} y={85} w={170} title="AlphaFold2" sub="dropout retained" tone="accent" />
+      <Node x={1030} y={85} w={150} title="100 structures" sub="PDB · pLDDT · pTM" tone="output" />
+
+      {/* Loop annotation inside the inference engine */}
+      <text x={819} y={184} textAnchor="middle" fill="#8B95A9" fontSize={11}>
+        for each cluster, M = 10 runs
+      </text>
+
+      {/* Consumers */}
+      <Node x={568} y={300} w={246} h={64} title="py3Dmol" sub="interactive 3D ensemble" />
+      <Node x={884} y={300} w={276} h={64} title="TM-align" sub="best TM per state · fill-ratio" />
     </svg>
   );
 }

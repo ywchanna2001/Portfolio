@@ -87,7 +87,7 @@ export default async function CaseStudyPage({
               </span>
             </h1>
 
-            <p className="max-w-[760px] text-base leading-relaxed text-muted md:text-lg">
+            <p className="hyphens-auto max-w-[760px] text-justify text-base leading-relaxed text-muted md:text-lg">
               {project.standfirst}
             </p>
           </div>
@@ -128,12 +128,13 @@ export default async function CaseStudyPage({
               <div className="grid items-center gap-10 rounded-2xl border border-line bg-panel/60 p-6 md:p-10 lg:grid-cols-2">
                 <div className="flex flex-col gap-3.5">
                   <span className="font-mono text-xs uppercase tracking-wide text-dim">
-                    Fig. 1 — success rate vs. models generated per target
+                    Fig. 1 — OC23 success rate vs. sampling budget
                   </span>
                   <ResultsChart />
                   <span className="text-[13px] leading-relaxed text-dim">
-                    Baseline bars are placeholders — fill them in from the thesis
-                    results table.
+                    Baselines evaluated at 1,000 models per target (Table 7.2). This
+                    pipeline reaches the same success rate as the strongest of them
+                    using 100
                   </span>
                 </div>
                 <dl className="flex flex-col gap-6">
@@ -173,7 +174,7 @@ export default async function CaseStudyPage({
                   </h2>
 
                   {section.body.map((para, i) => (
-                    <p key={i} className="text-[17px] leading-[1.7] text-[#B8C0D0]">
+                      <p key={i} className="hyphens-auto text-justify text-[17px] leading-[1.7] text-[#B8C0D0]">
                       {para}
                     </p>
                   ))}

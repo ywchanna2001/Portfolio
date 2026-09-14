@@ -1,105 +1,97 @@
 /* ============================================================================
-   RESULTS CHART — the bar chart on the AlphaFold case study.
-
-   Plain SVG, drawn to a proper 0–100% scale (the y positions are computed, not
-   eyeballed, so the bars cannot lie). The two baseline bars are deliberately
-   marked as placeholders until you fill in the real figures from your thesis.
-
-   To use real numbers: replace the `bars` array below.
+   RESULTS CHART — OC23 success rate by method (Table 7.2 of the thesis).
    ========================================================================== */
 
-type Bar = {
-  /** Bar label under the axis. */
-  x: string;
-  /** Success rate, 0–100. Use null for a placeholder bar. */
-  value: number | null;
-  /** Label drawn above the bar. */
-  label: string;
-  kind: "mine" | "baseline";
+type Row = {
+  method: string;
+  rate: number;
+  budget: string;
+  mine?: boolean;
 };
 
-const bars: Bar[] = [
-  { x: "100 models", value: 78.3, label: "78.3%", kind: "mine" },
-  { x: "[N]", value: 71.4, label: "[baseline]", kind: "baseline" },
-  { x: "[N] models", value: 75.2, label: "[baseline]", kind: "baseline" },
+const rows: Row[] = [
+  { method: "This pipeline", rate: 78.3, budget: "N = 100", mine: true },
+  { method: "AFsample2", rate: 78.3, budget: "N = 1000" },
+  { method: "SPEACH_AF", rate: 73.9, budget: "N = 1000" },
+  { method: "MSA subsample", rate: 69.6, budget: "N = 1000" },
+  { method: "AFsample", rate: 56.5, budget: "N = 1000" },
+  { method: "AF-Cluster", rate: 47.8, budget: "N = 1000" },
+  { method: "AFvanilla", rate: 47.8, budget: "N = 5" },
 ];
 
-// Plot geometry
-const TOP = 40; // y for 100%
-const BOTTOM = 250; // y for 0%
-const scale = (pct: number) => BOTTOM - (pct / 100) * (BOTTOM - TOP);
+const LABEL_W = 132;
+const TRACK_X = 144;
+const TRACK_W = 300;
+const ROW_H = 40;
+const TOP = 44;
 
-const COL_X = [118, 300, 450]; // left edge of each bar
-const BAR_W = 44;
+const scale = (pct: number) => (pct / 100) * TRACK_W;
+const rowY = (i: number) => TOP + i * ROW_H;
 
 export default function ResultsChart() {
+  const height = TOP + rows.length * ROW_H + 16;
+
   return (
-    <svg viewBox="0 0 560 300" className="h-auto w-full" role="img" aria-label="Bar chart: this pipeline reaches 78.3% success on OC23 using 100 models per target, compared with sampling baselines">
-      {/* Axes and gridlines */}
+    <svg
+      viewBox={`0 0 560 ${height}`}
+      className="h-auto w-full"
+      role="img"
+      aria-label="Horizontal bar chart of OC23 success rates. This pipeline reaches 78.3 percent using 100 models per target, equalling AFsample2 which uses 1000. SPEACH_AF reaches 73.9 percent, MSA subsampling 69.6, AFsample 56.5, AF-Cluster and AFvanilla 47.8."
+    >
       <g stroke="rgba(255,255,255,0.08)">
-        <line x1="60" y1={TOP} x2="60" y2={BOTTOM} />
-        <line x1="60" y1={BOTTOM} x2="540" y2={BOTTOM} />
-        {[25, 50, 75].map((p) => (
-          <line key={p} x1="60" y1={scale(p)} x2="540" y2={scale(p)} strokeDasharray="3 5" />
+        {[0, 25, 50, 75, 100].map((p) => (
+          <line
+            key={p}
+            x1={TRACK_X + scale(p)} y1={TOP - 14}
+            x2={TRACK_X + scale(p)} y2={rowY(rows.length) - 8}
+            strokeDasharray={p === 0 ? undefined : "3 5"}
+          />
         ))}
       </g>
-
-      {/* Axis labels */}
-      <g fontFamily="var(--font-mono)" fontSize="11" fill="#8B95A9">
+      <g fontFamily="var(--font-mono)" fontSize="10" fill="#8B95A9">
         {[0, 25, 50, 75, 100].map((p) => (
-          <text key={p} x="50" y={scale(p) + 4} textAnchor="end">
+          <text key={p} x={TRACK_X + scale(p)} y={TOP - 22} textAnchor="middle">
             {p}%
           </text>
         ))}
-        {bars.map((b, i) => (
-          <text key={b.x} x={COL_X[i] + BAR_W / 2} y={BOTTOM + 22} textAnchor="middle">
-            {b.x}
-          </text>
-        ))}
       </g>
 
-      {/* Bars */}
-      {bars.map((b, i) => {
-        if (b.value === null) return null;
-        const y = scale(b.value);
-        const mine = b.kind === "mine";
+      {rows.map((r, i) => {
+        const y = rowY(i);
+        const w = scale(r.rate);
         return (
-          <g key={b.x}>
+          <g key={r.method}>
+            <text
+              x={LABEL_W} y={y + 15} textAnchor="end"
+              fontFamily="var(--font-sans)" fontSize="12"
+              fill={r.mine ? "#E7EBF3" : "#B8C0D0"}
+              fontWeight={r.mine ? 600 : 400}
+            >
+              {r.method}
+            </text>
             <rect
-              x={COL_X[i]}
-              y={y}
-              width={BAR_W}
-              height={BOTTOM - y}
-              rx={3}
-              fill={mine ? "rgba(79,227,193,0.35)" : "rgba(60,124,240,0.35)"}
-              stroke={mine ? "#4FE3C1" : "#3C7CF0"}
+              x={TRACK_X} y={y} width={w} height={20} rx={3}
+              fill={r.mine ? "rgba(79,227,193,0.35)" : "rgba(60,124,240,0.28)"}
+              stroke={r.mine ? "#4FE3C1" : "#3C7CF0"}
               strokeWidth="1.5"
             />
             <text
-              x={COL_X[i] + BAR_W / 2}
-              y={y - 10}
-              textAnchor="middle"
-              fontFamily="var(--font-mono)"
-              fontSize="12"
-              fill={mine ? "#E7EBF3" : "#8B95A9"}
+              x={TRACK_X + w + 10} y={y + 15}
+              fontFamily="var(--font-mono)" fontSize="11"
+              fill={r.mine ? "#E7EBF3" : "#B8C0D0"}
             >
-              {b.label}
+              {r.rate}%
+            </text>
+            <text
+              x={TRACK_X + w + 52} y={y + 15}
+              fontFamily="var(--font-mono)" fontSize="10"
+              fill={r.mine ? "#4FE3C1" : "#5C6577"}
+            >
+              {r.budget}
             </text>
           </g>
         );
       })}
-
-      {/* Legend */}
-      <g fontFamily="var(--font-sans)" fontSize="12">
-        <rect x="60" y="14" width="10" height="10" fill="rgba(79,227,193,0.35)" stroke="#4FE3C1" />
-        <text x="76" y="23" fill="#B8C0D0">
-          this pipeline
-        </text>
-        <rect x="170" y="14" width="10" height="10" fill="rgba(60,124,240,0.35)" stroke="#3C7CF0" />
-        <text x="186" y="23" fill="#B8C0D0">
-          sampling baselines
-        </text>
-      </g>
     </svg>
   );
 }

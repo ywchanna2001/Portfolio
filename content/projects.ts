@@ -55,39 +55,41 @@ export type Project = {
 
 export const projects: Project[] = [
   /* ------------------------------------------------------------------------ */
-  {
+    {
     slug: "alphafold-conformational-ensembles",
-    title: "AlphaFold-based protein conformational ensemble prediction",
+    title: "AlphaFold architecture-based protein conformational ensemble prediction",
     category: "Research",
     status: "Final-year research project",
     tagline:
-      "A training-free, inference-time pipeline that coaxes AlphaFold into sampling multiple conformations. Localized random column masking of the MSA plus active inference-time dropout, with DBSCAN clustering to pick representative states. 78.3% success on OC23 dataset while generating only 100 models per target.",
-    tags: ["PyTorch", "JAX", "ColabFold", "DBSCAN"],
+      "An inference-time wrapper that makes AlphaFold2 predict alternative protein conformations without retraining it. DBSCAN partitions the MSA by evolutionary signals, then random column masking and retained dropout perturb each partition during inference. Matches the state of the art systems on the OC23 benchmark by achieving 78.3% accuracy using 100 models per target where competing methods need 1,000.",
+    tags: ["AlphaFold2", "AI for Science", "Structural Biology", "ColabFold", "JAX", "DBSCAN", "MMseqs2"],
     featured: true,
     diagram: "alphafold",
 
     meta: [
-      { label: "Role", value: "Final-year researcher" },
-      { label: "Stack", value: "PyTorch · JAX · ColabFold" },
-      { label: "Benchmark", value: "OC23" },
-      { label: "Year", value: "2025–26" },
+      { label: "Role", value: "Sole researcher" },
+      { label: "Supervisor", value: "Prof. Thushari Silva" },
+      { label: "Stack", value: "Python · ColabFold · JAX · scikit-learn" },
+      { label: "Benchmark", value: "OC23 (23 proteins)" },
+      { label: "Compute", value: "1 × A100 40GB, ~12 h" },
+      { label: "Year", value: "2026" },
     ],
     links: [
-      { label: "GitHub", href: "[link-to-repo]" },
-      { label: "Preprint", href: "[link-to-your-preprint]" },
+      { label: "GitHub", href: "https://github.com/ywchanna2001/Protein_Conformational_Ensembles_Prediction.git" },
+      { label: "Preprint", href: "https://www.preprints.org/manuscript/202601.0708" },
     ],
 
     heading: {
-      lead: "Making AlphaFold sample",
+      lead: "Making AlphaFold generate",
       emphasis: "more than one answer — without retraining it.",
     },
     standfirst:
-      "Proteins move. AlphaFold gives you one structure. This project is an inference-time pipeline that turns a single prediction into a conformational ensemble — reaching 78.3% success on the OC23 benchmark with a tenth of the compute of ensemble baselines.",
+      "Proteins move; AlphaFold2 returns one structure. This thesis proposes an inference-time wrapper that recovers alternative conformations by partitioning a protein's evolutionary history and perturbing each partition as it passes through the network. It resolves both states for 18 of 23 OC23 targets — equalling AFsample2 — at a tenth of the sampling budget.",
 
     stats: [
-      { value: "78.3%", label: "Success rate · OC23" },
-      { value: "10×", label: "Reduction in compute" },
-      { value: "100", label: "Models per target [vs. baseline N]" },
+      { value: "78.3%", label: "OC23 success rate · 18 of 23 targets" },
+      { value: "10×", label: "Lower sampling budget than baselines" },
+      { value: "100", label: "Models per target (K=10 × M=10)" },
     ],
 
     sections: [
@@ -96,56 +98,66 @@ export const projects: Project[] = [
         eyebrow: "01 — Problem",
         heading: "One protein, many shapes, one prediction.",
         body: [
-          "AlphaFold predicts a single, static structure per sequence, but many proteins switch between functionally distinct conformations — open and closed states, apo and holo forms. Existing approaches to recover that diversity either retrain the model or brute-force it with hundreds to thousands of stochastic samples per target, which is expensive and slow.",
-          "The goal: recover multiple conformations at inference time, cheaply, with no training.",
+          "AlphaFold2 predicts static structures at near-experimental accuracy, but natively dynamic proteins exist as conformational ensembles — open and closed states, fold switches, apo and holo forms. A single predicted structure misses the states that often matter most for function and for drug discovery.",
+          "Methods that do recover alternative states hit the same bottleneck from two directions. Sampling approaches such as AFsample2 and AF-Cluster brute-force the problem, generating on the order of a thousand structural decoys per target to achieve coverage. Generative approaches such as AlphaFlow avoid that cost at inference but depend on training over expensive molecular dynamics simulations. Either way the barrier is compute, which puts conformational ensemble prediction out of reach on accessible hardware.",
+          "The gap this thesis addresses: an accurate framework for predicting conformational ensembles that runs within a single consumer-grade GPU budget.",
         ],
       },
       {
         id: "approach",
         eyebrow: "02 — Approach",
-        heading: "Two sources of randomness, then cluster.",
+        heading: "Separate the evolutionary signals, then perturb each one.",
         body: [
-          "The pipeline is dual-stochastic. First, localized random column masking perturbs the multiple-sequence alignment so that co-evolutionary signal is partially hidden in different regions on each run. Second, dropout is kept active during inference, injecting noise inside the network. Each run yields a slightly different structure; DBSCAN clusters the 100 outputs by structural similarity, and cluster representatives form the ensemble. No weights are touched.",
+          "The hypothesis is that alternative conformations are already embedded in a protein's evolutionary history, and can be recovered by partitioning its multiple sequence alignment into sub-clusters before applying targeted stochastic perturbation at inference.",
+          "This matters because a protein's alternative state is usually supported by a minority of homologues. Subsample the MSA at random and that signal is diluted by the larger group supporting the dominant conformation. Density-based clustering separates the signals before they reach the network, so a minority state gets its own alignment rather than being averaged away.",
+          "Perturbation is then applied at two independent levels — one to the input, one inside the network. Because they act at different levels they compose rather than duplicate, which is what lets the pipeline escape the single dominant conformation the training objective favours. Nothing is retrained: the whole method is a wrapper around pre-trained AlphaFold2 weights, which also means it carries forward to later versions of the model.",
         ],
         cards: [
           {
+            kicker: "Partition",
+            title: "DBSCAN over the MSA",
+            text: "One-hot encoded homologues clustered by evolutionary similarity; ε chosen to maximise cluster count. K = 10 sub-MSAs selected.",
+          },
+          {
             kicker: "Stochastic 1",
-            title: "Localized column masking",
-            text: "Random contiguous MSA columns masked per run.",
+            title: "Random column masking",
+            text: "A fraction ρ = 0.15 of alignment columns replaced with the unknown-residue token in every homologue row. The query row is left intact.",
           },
           {
             kicker: "Stochastic 2",
             title: "Inference-time dropout",
-            text: "Dropout kept active during the forward pass.",
-          },
-          {
-            kicker: "Selection",
-            title: "DBSCAN clustering",
-            text: "Density-based grouping of the 100 models into states.",
+            text: "Evoformer dropout retained during the forward pass (0.15 MSA stack, 0.25 pair stack), so identical input follows different paths.",
           },
         ],
       },
       {
         id: "architecture",
         eyebrow: "03 — Architecture",
-        heading: "The pipeline, end to end.",
-        body: [],
+        heading: "Four modules, one forward direction.",
+        body: [
+          "The system is a pipeline of four modules that communicate through files on disk rather than shared memory, so each can be run, inspected and tested independently. Three lie on the prediction path; the fourth exists only for benchmarking.",
+          "Pre-processing takes a FASTA sequence, builds an alignment with MMseqs2 against UniRef30 and an environmental database, discards homologues with a gap fraction above 0.25, and partitions the remainder with DBSCAN into K = 10 sub-MSAs. The inference engine applies column masking to each sub-MSA and runs AlphaFold2 with dropout retained, M = 10 times per cluster — 100 structures per target, each written with its pLDDT and pTM confidence. Visualization renders the ensemble interactively with py3Dmol, and is the only output for a target with no known alternative state.",
+          "Keeping evaluation off the prediction path is a deliberate design decision rather than an organisational one. The open and closed labels derive from the reference structures, and those are visible only inside the evaluation module — so the prediction path is blind to the ground truth it is later measured against.",
+        ],
       },
       {
         id: "results",
         eyebrow: "04 — Results",
-        heading: "78.3% of OC23 targets, at a tenth of the cost.",
+        heading: "State-of-the-art accuracy at a tenth of the cost.",
         body: [
-          "Evaluated on the standardized OC23 open/closed conformation dataset, the pipeline recovered both states for 78.3% of targets while generating only 100 models per target — roughly a 10× reduction in compute against sampling-based baselines.",
-          "[Add here: the per-target TM-score table, a rendered open/closed overlay image, and a short failure-case analysis from your thesis. Concrete numbers and a picture of a failure case are what make a results section credible.]",
+          "Evaluated on OC23, a standard benchmark of 23 structurally diverse proteins with experimentally determined open and closed states. A target counts as solved only when the ensemble contains at least one model scoring TM > 0.8 against both states, measured with TM-align at a fixed d₀ of 3.5 Å.",
+          "The pipeline resolved both conformations for 18 of 23 targets — a 78.3% success rate — with average peak TM-scores of 0.844 to state 1 and 0.891 to state 2, and an average path fill-ratio of 0.181. That equals AFsample2, the strongest published baseline, which needs 1,000 models per target against this pipeline's 100: a 90% reduction in forward passes. Against AF-Cluster, which partitions the MSA but applies no stochastic perturbation, the improvement is 30.5 percentage points — evidence that clustering alone is insufficient to trigger a conformational transition.",
+          "The five failures are informative. O76728 and P00558 each collapsed onto one state (best scores of 0.59/0.96 and 0.95/0.58 respectively), which is the signature of a dominant co-evolutionary signal that a 15% masking fraction cannot overcome. Where the pipeline works well it maps the pathway, not just the endpoints: A2RJ53 produced a continuous distribution between both states with a fill-ratio of 0.418, indicating that transition intermediates were sampled rather than only the two extremes.",
         ],
       },
       {
         id: "reflection",
         eyebrow: "05 — What I'd change",
-        heading: "Honest notes for next time.",
+        heading: "Honest notes on the limits.",
         body: [
-          "[Write 3–4 sentences in your own voice: which hyper-parameters were most sensitive, where DBSCAN struggled, what you would try with AlphaFold 3 or a diffusion-based sampler, and what genuinely surprised you. This is the section interviewers read most carefully — it shows judgement, not just execution.]",
+          "Two limitations are structural rather than incidental. Targets with very stable ground states behind high energy barriers resist a fixed 15% masking fraction and collapse back to the dominant conformation — the perturbation is uniform where the problem is not. And the whole method inherits DBSCAN's dependence on MSA diversity: if the alternative state is represented by only a handful of sequences, clustering labels them noise and discards them, and no amount of downstream perturbation recovers a signal that was thrown away before inference.",
+          "The fix I would try first is an adaptive masking fraction — predicting per-cluster how much of the alignment to mask, rather than applying one rate everywhere, so the co-evolutionary core is preserved while transition sampling is accelerated where it is needed. Beyond that, the wrapper is deliberately architecture-agnostic, so porting it to AlphaFold3 and multi-chain complexes is the natural next step.",
+          "The lesson I took from the build itself: the win came from composing two perturbations that act at different levels, not from making either one stronger. AF-Cluster clusters but does not perturb; AFsample perturbs but does not cluster. Doing both, cheaply, is what bought the 10×.",
         ],
       },
     ],
