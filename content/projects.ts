@@ -263,18 +263,18 @@ export const projects: Project[] = [
 
     meta: [
       { label: "Role", value: "Solo build" },
-      { label: "Stack", value: "YOLOv8 · OpenCV · scikit-learn" },
+      { label: "Stack", value: "YOLOv8 · OpenCV · Python · scikit-learn" },
       { label: "Input", value: "Broadcast video" },
-      { label: "Output", value: "Speed · distance · position" },
+      { label: "Output", value: "Speed · distance · position detecting players, ball and referees" },
     ],
-    links: [{ label: "GitHub", href: "[link-to-repo]" }],
+    links: [{ label: "GitHub", href: "https://github.com/ywchanna2001/AI-ML-Football-Analysis-system.git" }],
 
     heading: {
       lead: "Turning broadcast footage into",
       emphasis: "numbers you can actually coach with.",
     },
     standfirst:
-      "Broadcast football video is a moving camera pointed at 22 people in two colours. This system detects and tracks every player, works out which team they belong to, cancels out the camera's own motion, and maps the picture onto the real pitch so distances mean something.",
+      "Broadcast football video is a moving camera pointed at 22 people in two colours. This system detects and tracks every player, works out which team they belong to, cancels out the camera's own motion, and calculates velocity of each palyer, referees and ball. Also this system calculates the distance each player covered.",
 
     sections: [
       {
@@ -321,17 +321,14 @@ export const projects: Project[] = [
         eyebrow: "04 — Results",
         heading: "What comes out the other end.",
         body: [
-          "[Add here: detection mAP on your held-out clips, tracking stability (how often an ID switches), and a sanity check of estimated speeds against known values — a sprint should come out around 8–9 m/s, and if it does not, say so.]",
-          "[Embed a short annotated clip here. This project is inherently visual; a 15-second GIF of the tracker running is worth more than three paragraphs.]",
-        ],
+          "To be added..." ],
       },
       {
         id: "reflection",
         eyebrow: "05 — What I'd change",
-        heading: "Honest notes.",
+        heading: "Future improvements.",
         body: [
-          "[Write in your own voice: where tracking fails — occlusions, players in similar kit, the goalkeeper — and what you would try next, such as re-identification embeddings or a calibrated pitch model.]",
-        ],
+          "To be added..."    ],
       },
     ],
   },
