@@ -69,7 +69,7 @@ export const projects: Project[] = [
     meta: [
       { label: "Role", value: "Sole researcher" },
       { label: "Supervisor", value: "Prof. Thushari Silva" },
-      { label: "Stack", value: "Python · ColabFold · JAX · scikit-learn" },
+      { label: "Stack", value: "Python · ColabFold · Biopython · JAX · scikit-learn" },
       { label: "Benchmark", value: "OC23 (23 proteins)" },
       { label: "Compute", value: "1 × A100 40GB, ~12 h" },
       { label: "Year", value: "2026" },
