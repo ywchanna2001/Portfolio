@@ -185,7 +185,46 @@ export default async function CaseStudyPage({
                       <ProjectDiagram kind={project.diagram} />
                     </div>
                   )}
-
+                                    {/* Optional demo video or screenshot. */}
+                  {section.media && (
+                    <figure
+                      className={`mt-2 flex flex-col gap-3 ${
+                        section.media.portrait ? "items-center" : ""
+                      }`}
+                    >
+                      <div
+                        className={`overflow-hidden rounded-2xl border border-line bg-panel/60 ${
+                          section.media.portrait ? "w-full max-w-[320px]" : "w-full"
+                        }`}
+                      >
+                        {section.media.kind === "video" ? (
+                          <video
+                            src={section.media.src}
+                            poster={section.media.poster}
+                            controls
+                            muted
+                            loop
+                            playsInline
+                            preload="metadata"
+                            className="block h-auto w-full"
+                          />
+                        ) : (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={section.media.src}
+                            alt={section.media.caption ?? ""}
+                            className="block h-auto w-full"
+                          />
+                        )}
+                      </div>
+                      {section.media.caption && (
+                        <figcaption className="text-[13px] leading-relaxed text-dim">
+                          {section.media.caption}
+                        </figcaption>
+                      )}
+                    </figure>
+                  )}
+                  
                   {section.cards && (
                     <div className="mt-2 grid gap-4 sm:grid-cols-3">
                       {section.cards.map((card) => (

@@ -50,6 +50,16 @@ export type Project = {
     body: string[];
     /** Optional set of small cards under the text. */
     cards?: { kicker: string; title: string; text: string }[];
+        media?: {
+      kind: "video" | "image";
+      src: string;
+      /** Video only: a still shown before play. Strongly recommended. */
+      poster?: string;
+      /** Shown underneath in small grey text. */
+      caption?: string;
+      /** True for phone-shaped (9:16) recordings, e.g. a mobile app. */
+      portrait?: boolean;
+    };
   }[];
 };
 
@@ -316,19 +326,28 @@ export const projects: Project[] = [
         heading: "The frame pipeline.",
         body: [],
       },
-      {
+            {
         id: "results",
         eyebrow: "04 — Results",
         heading: "What comes out the other end.",
         body: [
-          "To be added..." ],
+          "",
+        ],
+        media: {
+          kind: "video",
+          src: "/demo-football.mp4",
+          poster: "/demo-football-poster.jpg",
+          caption:
+            "Annotated output: player and ball detection, team colours assigned by K-Means, and per-player speed and distance estimated after camera-motion correction.",
+        },
       },
       {
         id: "reflection",
         eyebrow: "05 — What I'd change",
         heading: "Future improvements.",
         body: [
-          "To be added..."    ],
+          "To be added...",
+        ],
       },
     ],
   },
